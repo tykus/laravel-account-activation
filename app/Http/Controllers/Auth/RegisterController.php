@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Events\Auth\UserRequestedActivationEmail;
 
 class RegisterController extends Controller
 {
@@ -67,7 +68,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'active' => false
+            'active' => false,
             'activation_token' => str_random(255)
         ]);
     }
@@ -81,6 +82,8 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request, $user)
     {
+        event(new UserRequestedActivationEmail($user));
+
         $this->guard()->logout();
 
         return redirect($this->redirectPath())
