@@ -26,4 +26,15 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Activate the current user
+     */
+    public function activate()
+    {
+        return tap($this)->update([
+            'active' => true,
+            'activation_token' => null
+        ]);
+    }
 }
