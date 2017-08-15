@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -26,6 +27,19 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Find a user by account activation details
+     * @param Illuminate\Database\Eloquent\Builder $query
+     * @param  string
+     * @param  string
+     * @return Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeByActivationDetails(Builder $query, $email, $token)
+    {
+        return $query->where('activation_token', $token)
+            ->where('email', $email);
+    }
 
     /**
      * Activate the current user

@@ -10,8 +10,7 @@ class ActivationController extends Controller
 {
     public function __invoke(Request $request)
     {
-        $user = User::where('activation_token', $request->token)
-            ->where('email', $request->email)
+        $user = User::byActivationDetails($request->email, $request->token)
             ->firstOrFail()
             ->activate();
 
