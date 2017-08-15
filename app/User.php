@@ -42,6 +42,27 @@ class User extends Authenticatable
     }
 
     /**
+     * Query scope to find a user by email address
+     * @param  Illuminate\Database\Eloquent\Builder
+     * @param  string $email
+     * @return Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeByEmail(Builder $query, $email)
+    {
+        return $query->where('email', $email);
+    }
+
+    /**
+     * Query scope to return only inactive users
+     * @param  Illuminate\Database\Eloquent\Builder
+     * @return Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeInactive(Builder $query)
+    {
+        return $query->where('active', false);
+    }
+
+    /**
      * Activate the current user
      */
     public function activate()
